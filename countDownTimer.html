@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="countdowntimer, stopwatch, count, down, timer, time ,clock, watch ,stopper ,html ,css, javascript, miniproject ,mini, mini project, project">
+    <title>Count Dwown Timer</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(#3AD0D0, #B8CD05);
+        }
+
+        .sub {
+            min-height: 50vh;
+            min-width: 50vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border: 2px solid white;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 1px 1px 10px rgba(255, 200, 200, 0.1);
+        }
+
+        .p {
+            font-size: 3rem;
+            padding: 20px;
+        }
+
+        .div1 {
+            margin: 15px;
+            font-size: large;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .div2 {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: large;
+        }
+
+        input {
+            min-width: 5vw;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3ad0d098;
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="sub">
+            <p class="p">00 : 00 : 00</p>
+            <div class="div1">
+                <div>
+                    <label for="hr">Hours : </label>
+                    <input type="number" class="hr" placeholder="hours" max="24" min="0">
+                </div>
+                <div><label for="min">Minutes : </label>
+                    <input type="number" class="min" placeholder="minutes" max="60" min="0">
+                </div>
+                <div><label for="sec">Seconds : </label>
+                    <input type="number" class="sec" placeholder="seconds" max="60" min="0">
+                </div>
+            </div>
+            <div class="div2">
+                <button class="setTime">Set Time</button>
+                <button class="start">Start</button>
+                <button class="stop">Stop</button>
+                <button class="resume">Resume</button>
+                <button class="restart">Restart</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        hr = document.querySelector(".hr");
+        min = document.querySelector(".min");
+        sec = document.querySelector(".sec");
+        p = document.querySelector(".p");
+        setTime = document.querySelector(".setTime");
+        start = document.querySelector(".start");
+        stop = document.querySelector(".stop");
+        resume = document.querySelector(".resume");
+        restart = document.querySelector(".restart");
+        function padStart(value) {
+            return value.toString().padStart(2, '0');
+        }
+        setTime.addEventListener("click", () => {
+            if ((hr.value > 24 || hr.value < 0) || (min.value > 60 || min.value < 0) || (sec.value > 24 || sec.value < 0)) {
+                alert("Enter proper time");
+            }
+            else {
+                p.innerText = `${hr.value.padStart(2, 0)} : ${min.value.padStart(2, 0)} : ${sec.value.padStart(2, 0)}`;
+            }
+        })
+        var sec11, min11, hr11, sec1, min1, hr1;
+        var intervalId;
+
+        function startTimer(sec, min, hr) {
+            sec1 = sec;
+            min1 = min;
+            hr1 = hr;
+
+            intervalId = setInterval(() => {
+                if (sec1 == 0 && min1 == 0 && hr1 == 0) {
+                    alert("Time is up");
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                if (sec1 == 0) {
+                    if (min1 == 0) {
+                        if (hr1 > 0) {
+                            hr1--;
+                            min1 = 59;
+                            sec1 = 59;
+                        }
+                    } else {
+                        min1--;
+                        sec1 = 59;
+                    }
+                } else {
+                    sec1--;
+                }
+
+                p.innerText = `${hr1.toString().padStart(2, '0')} : ${min1.toString().padStart(2, '0')} : ${sec1.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        start.addEventListener("click", () => {
+            sec1 = parseInt(sec.value) || 0;
+            min1 = parseInt(min.value) || 0;
+            hr1 = parseInt(hr.value) || 0;
+
+
+            clearInterval(intervalId); // Ensure any previous interval is cleared
+            startTimer(sec1, min1, hr1);
+        });
+
+        stop.addEventListener("click", () => {
+            sec11 = sec1;
+            min11 = min1;
+            hr11 = hr1;
+            clearInterval(intervalId);
+        });
+
+        resume.addEventListener("click", () => {
+            clearInterval(intervalId); // Ensure no multiple intervals run simultaneously
+            startTimer(sec11, min11, hr11);
+        });
+        restart.addEventListener("click", () => {
+            sec1 = parseInt(sec.value) || 0;
+            min1 = parseInt(min.value) || 0;
+            hr1 = parseInt(hr.value) || 0;
+
+            clearInterval(intervalId); // Ensure any previous interval is cleared
+            startTimer(sec1, min1, hr1);
+        });
+    </script>
+</body>
+
+</html>
